@@ -34,17 +34,29 @@ public class ExtentTestListener implements ITestListener {
 
         ExtentTestManager.getTest().fail(result.getThrowable());
 
-        Object testClass = result.getInstance();
-        WebDriver driver = ((BaseTest) testClass).getDriver();
+        Object testInstance = result.getInstance();
 
-        String screenshotPath =
-                ScreenshotUtils.takeScreenshot(
-                        driver,
-                        result.getMethod().getMethodName()
-                );
+        if (testInstance instanceof BaseTest) {
 
-        ExtentTestManager.getTest()
-                .addScreenCaptureFromPath(screenshotPath);
+            WebDriver driver = ((BaseTest) testInstance).getDriver();
+
+            if (driver != null) {
+                String screenshotPath =
+                        ScreenshotUtils.takeScreenshot(
+                                driver,
+                                result.getMethod().getMethodName()
+                        );
+
+                ExtentTestManager.getTest()
+                        .addScreenCaptureFromPath(screenshotPath);
+            } else {
+                ExtentTestManager.getTest()
+                        .warning("WebDriver is null. Screenshot not captured.");
+            }
+        } else {
+            ExtentTestManager.getTest()
+                    .warning("Test class does not extend BaseTest.");
+        }
     }
 
     @Override

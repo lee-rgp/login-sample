@@ -23,9 +23,9 @@ public class BaseTest extends BasePage {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         // Chrome bắt buộc phải chạy headless cho CI/CD vì tự run trên github không có UI
-//        options.addArguments("--headless=new");
-//        options.addArguments("--no-sandbox");
-//        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
 
         driver.set(new ChromeDriver(options));
         getDriver().manage().window().maximize();
