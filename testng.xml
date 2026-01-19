@@ -3,9 +3,10 @@
     <listeners>
         <listener class-name="listeners.ExtentTestListener"/>
     </listeners>
-    <test name="First Login Test">
+    <test name="Login Test">
         <classes>
-            <class name="LoginTest"/>
+            <class name="LoginOtpAuthentTest"/>
+            <class name="LoginMailAuthentTest"/>
         </classes>
     </test>
 </suite>

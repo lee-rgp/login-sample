@@ -1,6 +1,5 @@
 import base.BaseTest;
 import com.aventstack.extentreports.ExtentTest;
-import dev.samstevens.totp.exceptions.CodeGenerationException;
 import listeners.ExtentTestListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,11 +7,11 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 @Listeners(ExtentTestListener.class)
-public class LoginTest extends BaseTest {
+public class LoginMailAuthentTest extends BaseTest {
     private final long _timeOut = 10;
     private final long _verifyTimeOut = 3;
     private final String _baseUrl = "https://stag.osyamazakiglobel.club";
-    private final String _email = "admin39@gmail.com";
+    private final String _email = "admin30@gmail.com";
 //    private final String _email = "admin38@gmail.com";
 //    private final String _email = "admin29@gmail.com";
     private final String _password = "be12345678@Ab";
@@ -32,10 +31,10 @@ public class LoginTest extends BaseTest {
                 Step3: Input confirm password
                 Step4: Click CHANGE button
             Screen: FIRST LOGIN AUTHENT
-                Step1: Select [Authenticator App] radio button
-                Step2: Click SET UP WITH AUTHENTICATION APP button
-            Screen: SETUP 2FA - AUTHENTICATOR APP
-                Step1: Input authentication code
+                Step1: Select [Email Otp] radio button
+                Step2: Click SET UP WITH EMAIL OTP button
+            Screen: SETUP 2FA - VERIFY YOUR EMAIL
+                Step1: Input email code
                 Step2: Click VERIFY button
             Screen: RECOVERY CODES
                 Step1: Click FINISH SETUP button
@@ -50,8 +49,8 @@ public class LoginTest extends BaseTest {
                 Step4: Click LOGIN button
                     Is trusted device?
                         TRUE:
-                            Screen: Login with authent app
-                                Step1: Input authentication code
+                            Screen: Login with verify your email
+                                Step1: Input email code
                                 Step2: Click VERIFY button
                             Screen: BACK OFFICE
                                 VP1: Verify accessing BACK OFFICE screen successfully
@@ -96,10 +95,10 @@ public class LoginTest extends BaseTest {
                 extentTest.info("TRUSTED DEVICE!");
             } else { // Untrusted device
                 extentTest.info("UNTRUSTED DEVICE!");
-                String secretKey = "TUSYZ6LS5LFT7RC56PQPA5MOKSBRLZGS"; // (admin39)
+                String emailCode = ""; // (admin39)
 //                String secretKey = "CJ5P4SB2PFGPX7VUMNLPNMNT74Z66DW3"; // (admin38)
 //                String secretKey = getTotpSecretKey(this._baseUrl, this._email, this._newPassword);
-                loginTwoFaAuthentApp(secretKey);
+                loginTwoFaEmailCode(emailCode);
             }
         }
         verifyAccessBackOffice();
@@ -158,30 +157,28 @@ public class LoginTest extends BaseTest {
 
         // Screen: FIRST LOGIN AUTHENT
         extentTest.info("Screen: FIRST LOGIN AUTHENT");
-        // Step1: Select [Authenticator App] radio button
-        extentTest.info("Step1: Select [Authenticator App] radio button");
-        By byAuthentRadioRad = By.id("TOTP");
-        click(webDriver, byAuthentRadioRad, this._timeOut);
-        // Step2: Click SET UP WITH AUTHENTICATION APP button
-        extentTest.info("Step2: Click SET UP WITH AUTHENTICATION APP button");
-        By bySetUpWithAuthentAppBtn = By.xpath("//button[span[text()='SET UP WITH AUTHENTICATOR APP']]");
+        // Step1: Select [Email Otp] radio button
+        extentTest.info("Step1: Select [Email Otp] radio button");
+        By byEmailOtpRadioRad = By.id("EMAIL");
+        click(webDriver, byEmailOtpRadioRad, this._timeOut);
+        // Step2: Click SET UP WITH EMAIL OTP button
+        extentTest.info("Step2: Click SET UP WITH EMAIL OTP button");
+        By bySetUpWithAuthentAppBtn = By.xpath("//button[span[text()='SET UP WITH EMAIL OTP']]");
         click(webDriver, bySetUpWithAuthentAppBtn, this._timeOut);
     }
 
-    private void setupTwoFaAuthentApp() throws CodeGenerationException {
+    private void setupTwoFaAuthentApp() {
         WebDriver webDriver = getDriver();
         ExtentTest extentTest = getExtentTest();
 
-        // Screen: SETUP 2FA - AUTHENTICATOR APP
-        extentTest.info("Screen: SETUP 2FA - AUTHENTICATOR APP");
-        // Step1: Input authentication code
-        extentTest.info("Step1: Input authentication code");
-        By bySecretKeyLbl = By.xpath("(//span[text()='If you cannot scan the QR code, enter the key manually:'])/following-sibling::span");
+        // Screen: SETUP 2FA - VERIFY YOUR EMAIL
+        extentTest.info("Screen: SETUP 2FA - VERIFY YOUR EMAIL");
+        // Step1: Input email code
+        extentTest.info("Step1: Input email code");
         By byAuthenticationCodeTxt = By.xpath("//input[@name='code']");
-        String secretKey = getText(webDriver, bySecretKeyLbl, this._timeOut);
-        String otpCode = getOtpCode(secretKey);
-        getExtentTest().info("OTP Code: " + otpCode);
-        sendKeys(webDriver, byAuthenticationCodeTxt, this._timeOut, otpCode);
+        String emailCode = "";
+        getExtentTest().info("Email Code: " + emailCode);
+        sendKeys(webDriver, byAuthenticationCodeTxt, this._timeOut, emailCode);
         // Step2: Click VERIFY button
         extentTest.info("Step2: Click VERIFY button");
         By byVerifyBtn = By.xpath("//button[span[text()='VERIFY']]");
@@ -216,18 +213,17 @@ public class LoginTest extends BaseTest {
         }
     }
 
-    private void loginTwoFaAuthentApp(String secretKey) throws CodeGenerationException {
+    private void loginTwoFaEmailCode(String emailCode) {
         WebDriver webDriver = getDriver();
         ExtentTest extentTest = getExtentTest();
 
-        // Screen: Login with authent app
-        extentTest.info("Screen: Login with authent app");
-        // Step1: Input authentication code
-        extentTest.info("Step1: Input authentication code");
+        // Screen: Login with verify your email
+        extentTest.info("Screen: Login with verify your email");
+        // Step1: Input email code
+        extentTest.info("Step1: Input email code");
         By byAuthenticationCodeTxt = By.xpath("//input[@name='code']");
-        String otpCode = getOtpCode(secretKey);
-        getExtentTest().info("OTP Code: " + otpCode);
-        sendKeys(webDriver, byAuthenticationCodeTxt, this._timeOut, otpCode);
+        getExtentTest().info("Email Code: " + emailCode);
+        sendKeys(webDriver, byAuthenticationCodeTxt, this._timeOut, emailCode);
         // Step2: Click VERIFY button
         extentTest.info("Step2: Click VERIFY button");
         By byVerifyBtn = By.xpath("//button[span[text()='VERIFY']]");
