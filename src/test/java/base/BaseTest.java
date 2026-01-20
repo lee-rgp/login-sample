@@ -61,10 +61,15 @@ public class BaseTest extends BasePage {
         return otpGenerator.generateOTP(secretKey);
     }
 
-    public String getAuthLoginInfo(String baseUrl, String email, String password) throws Exception {
+    public String getAuthLoginInfo(String baseUrl, String email, String oldPassword, String newPassword) throws Exception {
+        ExtentTest extentTest = getExtentTest();
         ApiClient apiClient = new ApiClient();
-        String authLoginInfo = apiClient.login(baseUrl, email, password);
+        String authLoginInfo = apiClient.login(baseUrl, email, oldPassword);
+        if (JsonParser.getValue(authLoginInfo, "success").equals("false")) {
+            authLoginInfo = apiClient.login(baseUrl, email, newPassword);
+        }
         this.accessToken = getAccessToken(authLoginInfo);
+        extentTest.info("Access Token: " + accessToken);
         return authLoginInfo;
     }
 
@@ -83,6 +88,11 @@ public class BaseTest extends BasePage {
     public String getMeInfo(String baseUrl, String accessToken) throws Exception {
         ApiClient apiClient = new ApiClient();
         return apiClient.getMe(baseUrl, accessToken);
+    }
+
+    public String getMailOtpsInfo(String baseUrl, String accessToken) throws Exception {
+        ApiClient apiClient = new ApiClient();
+        return apiClient.getEmailOtps(baseUrl, accessToken);
     }
 
     public String getTotpSecretKey(String baseUrl, String accessToken) throws Exception {
@@ -106,6 +116,28 @@ public class BaseTest extends BasePage {
 
     public boolean isTrustedDevice(String authLoginInfo) {
         return Objects.equals(getRequires2faChallenge(authLoginInfo), "false");
+    }
+
+    public String getUserId(String baseUrl, String accessToken) throws Exception {
+        ExtentTest extentTest = getExtentTest();
+        String meInfo = getMeInfo(baseUrl, accessToken);
+        extentTest.info("meInfo: " + meInfo);
+        return JsonParser.getUserId(meInfo);
+    }
+
+    public String resendMailOtp(String baseUrl, String accessToken) throws Exception {
+        ExtentTest extentTest = getExtentTest();
+        ApiClient apiClient = new ApiClient();
+        String userId = getUserId(baseUrl, accessToken);
+        extentTest.info("User Id: " + userId);
+        return apiClient.resendMailOtp(baseUrl, accessToken, userId);
+    }
+
+    public String getMailCode(String baseUrl, String accessToken) throws Exception {
+        ExtentTest extentTest = getExtentTest();
+        String mailOtpsInfo = getMailOtpsInfo(baseUrl, accessToken);
+        extentTest.info("Mail Otps Info: " + mailOtpsInfo);
+        return JsonParser.getMailOtpsCode(mailOtpsInfo);
     }
 
 }

@@ -41,4 +41,16 @@ public class JsonParser {
         }
         return null;
     }
+
+    public static String getUserId(String jsonResponse) {
+        return getNestedValue(jsonResponse, "data", "id");
+    }
+
+    public static String getMailOtpsCode(String jsonResponse) {
+        JSONObject json = new JSONObject(jsonResponse);
+        JSONArray configs = json.getJSONObject("data").getJSONArray("otps");
+
+        JSONObject config = configs.getJSONObject(0);
+        return config.optString("code", null);
+    }
 }

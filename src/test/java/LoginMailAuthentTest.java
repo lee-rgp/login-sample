@@ -8,12 +8,9 @@ import org.testng.annotations.Test;
 
 @Listeners(ExtentTestListener.class)
 public class LoginMailAuthentTest extends BaseTest {
-    private final long _timeOut = 10;
-    private final long _verifyTimeOut = 3;
+    private final long _timeOut = 20;
     private final String _baseUrl = "https://stag.osyamazakiglobel.club";
-    private final String _email = "admin30@gmail.com";
-//    private final String _email = "admin38@gmail.com";
-//    private final String _email = "admin29@gmail.com";
+    private final String _email = "admin41@gmail.com";
     private final String _password = "be12345678@Ab";
     private final String _newPassword = "123456789@Ab";
     /*
@@ -57,47 +54,60 @@ public class LoginMailAuthentTest extends BaseTest {
                         FALSE:
                             Screen: BACK OFFICE
                                 VP1: Verify accessing BACK OFFICE screen successfully
+     Click LOGOUT button
      */
     @Test
     public void loginTest() throws Exception {
-        WebDriver webDriver = getDriver();
         ExtentTest extentTest = getExtentTest();
 
-//        String secretKey = "TUSYZ6LS5LFT7RC56PQPA5MOKSBRLZGS"; // (admin39)
-//        String secretKey = "CJ5P4SB2PFGPX7VUMNLPNMNT74Z66DW3"; // (admin38)
-//        String otpCode = getOtpCode(secretKey);
-//        getExtentTest().info("OTP Code: " + otpCode);
-
-//        String authLoginInfo = getAuthLoginInfo(this._baseUrl, this._email, this._newPassword);
-//        extentTest.info(authLoginInfo);
-//        String accessToken = getAccessToken(authLoginInfo);
-//        extentTest.info("Access Token: " + accessToken);
-//        String meInfo = getMeInfo(this._baseUrl, accessToken);
-//        extentTest.info("Me Info: " + meInfo);
-//        String secretKey = getTotpSecretKey(this._baseUrl, this._email, this._newPassword);
-//        extentTest.info("Secret key: " + secretKey);
-
         extentTest.info("Email: " + this._email);
-        login(this._password);
-        By byWrongPassToast = By.xpath("//div[text()='The username or password you entered is incorrect.']");
+        String authLoginInfo = getAuthLoginInfo(this._baseUrl, this._email, this._password, this._newPassword);
+        extentTest.info("authLoginInfo" + authLoginInfo);
+        String authLogoutInfo = "";
         // Is first Login?
-        if (isFirstLogin(webDriver, byWrongPassToast, this._verifyTimeOut)) { // First login
+        if (isMustChangePassword(authLoginInfo)) { // First login
             extentTest.info("FIRST LOGIN");
+            String resendMailOtpResponse = resendMailOtp(this._baseUrl, this.accessToken);
+            extentTest.info("ResendMailOtpResponse: " + resendMailOtpResponse);
+            String emailCode = "";
+            try {
+                emailCode = getMailCode(this._baseUrl, this.accessToken);
+                extentTest.info("Email Code: " + emailCode);
+            } catch (Exception e) {
+                extentTest.info(e.getMessage());
+                authLogoutInfo = getAuthLogoutInfo(this._baseUrl, this.accessToken);
+                extentTest.info("AuthLogoutInfo: " + authLogoutInfo);
+            }
+            authLogoutInfo = getAuthLogoutInfo(this._baseUrl, this.accessToken);
+            extentTest.info("AuthLogoutInfo: " + authLogoutInfo);
+            login(this._password);
             changePassword();
             firstLoginAuthent();
-            setupTwoFaAuthentApp();
+            setupTwoFaAuthentApp(emailCode);
             recoveryCode();
         } else { // After first login
             extentTest.info("AFTER FIRST LOGIN");
             login(this._newPassword);
-            By byLogoutBtn = By.xpath("//button[span[text()='Logout']]");
-            if (isTrustedDevice(webDriver, byLogoutBtn, this._verifyTimeOut)) { // Trusted device
+            if (isTrustedDevice(authLoginInfo)) { // Trusted device
                 extentTest.info("TRUSTED DEVICE!");
+                authLogoutInfo = getAuthLogoutInfo(this._baseUrl, this.accessToken);
+                extentTest.info("AuthLogoutInfo: " + authLogoutInfo);
+                login(this._newPassword);
             } else { // Untrusted device
                 extentTest.info("UNTRUSTED DEVICE!");
-                String emailCode = ""; // (admin39)
-//                String secretKey = "CJ5P4SB2PFGPX7VUMNLPNMNT74Z66DW3"; // (admin38)
-//                String secretKey = getTotpSecretKey(this._baseUrl, this._email, this._newPassword);
+                resendMailOtp(this._baseUrl, this.accessToken);
+                String emailCode = "";
+                try {
+                    emailCode = getMailCode(this._baseUrl, this.accessToken);
+                    extentTest.info("Email Code: " + emailCode);
+                } catch (Exception e) {
+                    extentTest.info(e.getMessage());
+                    authLogoutInfo = getAuthLogoutInfo(this._baseUrl, this.accessToken);
+                    extentTest.info("AuthLogoutInfo: " + authLogoutInfo);
+                }
+                authLogoutInfo = getAuthLogoutInfo(this._baseUrl, this.accessToken);
+                extentTest.info("AuthLogoutInfo: " + authLogoutInfo);
+                login(this._newPassword);
                 loginTwoFaEmailCode(emailCode);
             }
         }
@@ -167,7 +177,7 @@ public class LoginMailAuthentTest extends BaseTest {
         click(webDriver, bySetUpWithAuthentAppBtn, this._timeOut);
     }
 
-    private void setupTwoFaAuthentApp() {
+    private void setupTwoFaAuthentApp(String emailCode) throws Exception {
         WebDriver webDriver = getDriver();
         ExtentTest extentTest = getExtentTest();
 
@@ -176,7 +186,6 @@ public class LoginMailAuthentTest extends BaseTest {
         // Step1: Input email code
         extentTest.info("Step1: Input email code");
         By byAuthenticationCodeTxt = By.xpath("//input[@name='code']");
-        String emailCode = "";
         getExtentTest().info("Email Code: " + emailCode);
         sendKeys(webDriver, byAuthenticationCodeTxt, this._timeOut, emailCode);
         // Step2: Click VERIFY button
@@ -208,9 +217,19 @@ public class LoginMailAuthentTest extends BaseTest {
         By byLogoutBtn = By.xpath("//button[span[text()='Logout']]");
         if (isElementVisibility(webDriver, byLogoutBtn, this._timeOut)) {
             extentTest.pass("Verify accessing BACK OFFICE screen successfully");
+            logout();
         } else {
             extentTest.fail("Verify accessing BACK OFFICE screen unsuccessfully");
         }
+    }
+
+    private void logout() {
+        WebDriver webDriver = getDriver();
+        ExtentTest extentTest = getExtentTest();
+
+        By byLogoutBtn = By.xpath("//button[span[text()='Logout']]");
+        extentTest.info("Click LOGOUT button");
+        click(webDriver, byLogoutBtn, this._timeOut);
     }
 
     private void loginTwoFaEmailCode(String emailCode) {

@@ -75,4 +75,53 @@ public class ApiClient {
         process.waitFor();
         return response.toString();
     }
+
+    /**
+     * Cách sử dụng
+     *
+     * ApiClient apiClient = new ApiClient();
+     * String response = apiClient.resendMailOtp("http://your-api-url.com", "your-token-here", "user-id-here");
+     */
+    public String resendMailOtp(String baseUrl, String accessToken, String userId) throws Exception {
+        String[] command = {
+            "curl", "-X", "POST",
+            baseUrl + "/api/two-factor/resend-email-otp",
+            "-H", "Authorization: Bearer " + accessToken,
+            "-H", "Content-Type: application/json",
+            "-d", String.format("{\"userId\":\"%s\"}", userId)
+        };
+
+        Process process = Runtime.getRuntime().exec(command);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        process.waitFor();
+        return response.toString();
+    }
+
+    /**
+     * Cách sử dụng
+     * ApiClient apiClient = new ApiClient();
+     * String response = apiClient.getEmailOtps("http://your-api-url.com", "your-token-here");
+     */
+    public String getEmailOtps(String baseUrl, String accessToken) throws Exception {
+        String[] command = {
+            "curl", "-X", "GET",
+            baseUrl + "/api/two-factor/email-otps",
+            "-H", "Authorization: Bearer " + accessToken
+        };
+
+        Process process = Runtime.getRuntime().exec(command);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        process.waitFor();
+        return response.toString();
+    }
 }

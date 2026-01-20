@@ -6,7 +6,7 @@
     <test name="Login Test">
         <classes>
             <class name="LoginOtpAuthentTest"/>
-<!--            <class name="LoginMailAuthentTest"/>-->
+            <class name="LoginMailAuthentTest"/>
         </classes>
     </test>
 </suite>

@@ -10,11 +10,8 @@ import org.testng.annotations.Test;
 @Listeners(ExtentTestListener.class)
 public class LoginOtpAuthentTest extends BaseTest {
     private final long _timeOut = 10;
-    private final long _verifyTimeOut = 3;
     private final String _baseUrl = "https://stag.osyamazakiglobel.club";
     private final String _email = "admin12@gmail.com";
-//    private final String _email = "admin38@gmail.com";
-//    private final String _email = "admin29@gmail.com";
     private final String _password = "be12345678@Ab";
     private final String _newPassword = "123456789@Ab";
     /*
@@ -62,25 +59,10 @@ public class LoginOtpAuthentTest extends BaseTest {
      */
     @Test
     public void loginTest() throws Exception {
-        WebDriver webDriver = getDriver();
         ExtentTest extentTest = getExtentTest();
 
-//        String secretKey = "TUSYZ6LS5LFT7RC56PQPA5MOKSBRLZGS"; // (admin39)
-//        String secretKey = "CJ5P4SB2PFGPX7VUMNLPNMNT74Z66DW3"; // (admin38)
-//        String otpCode = getOtpCode(secretKey);
-//        getExtentTest().info("OTP Code: " + otpCode);
-
-//        String authLoginInfo = getAuthLoginInfo(this._baseUrl, this._email, this._newPassword);
-//        extentTest.info(authLoginInfo);
-//        String accessToken = getAccessToken(authLoginInfo);
-//        extentTest.info("Access Token: " + accessToken);
-//        String meInfo = getMeInfo(this._baseUrl, accessToken);
-//        extentTest.info("Me Info: " + meInfo);
-//        String secretKey = getTotpSecretKey(this._baseUrl, this._email, this._newPassword);
-//        extentTest.info("Secret key: " + secretKey);
-
         extentTest.info("Email: " + this._email);
-        String authLoginInfo = getAuthLoginInfo(this._baseUrl, this._email, this._newPassword);
+        String authLoginInfo = getAuthLoginInfo(this._baseUrl, this._email, this._password, this._newPassword);
         extentTest.info("authLoginInfo" + authLoginInfo);
         String authLogoutInfo = "";
         // Is first Login?
@@ -102,8 +84,6 @@ public class LoginOtpAuthentTest extends BaseTest {
                 login(this._newPassword);
             } else { // Untrusted device
                 extentTest.info("UNTRUSTED DEVICE!");
-//                String secretKey = "TUSYZ6LS5LFT7RC56PQPA5MOKSBRLZGS"; // (admin39)
-//                String secretKey = "CJ5P4SB2PFGPX7VUMNLPNMNT74Z66DW3"; // (admin38)
                 String secretKey = getTotpSecretKey(this._baseUrl, this.accessToken);
                 extentTest.info("Secret key: " + secretKey);
                 authLogoutInfo = getAuthLogoutInfo(this._baseUrl, this.accessToken);
