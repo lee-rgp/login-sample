@@ -57,7 +57,7 @@ public class LoginMailAuthentTest extends BaseTest {
      Click LOGOUT button
      */
     @Test
-    public void loginTest() throws Exception {
+    public void loginMailAuthentTest() throws Exception {
         ExtentTest extentTest = getExtentTest();
 
         extentTest.info("Email: " + this._email);
