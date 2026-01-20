@@ -70,13 +70,27 @@ jobs:
           git checkout --orphan gh-pages || git checkout gh-pages
 
           git rm -rf .
-          cp report/index.html index.html
+          
+          # Debug: List downloaded files
+          echo "Downloaded files:"
+          find report -type f || echo "No report folder"
+          
+          # Copy report files
+          if [ -f "report/index.html" ]; then
+            cp report/index.html index.html
+          elif [ -f "report/test-output/index.html" ]; then
+            cp report/test-output/index.html index.html
+          else
+            echo "<h1>No test report found</h1>" > index.html
+          fi
+          
+          # Copy screenshots if exist
           if [ -d "report/screenshots" ]; then
             cp -r report/screenshots screenshots
-          else
-            echo "No screenshots folder found. All tests may have passed."
+          elif [ -d "report/test-output/screenshots" ]; then
+            cp -r report/test-output/screenshots screenshots
           fi
 
           git add .
-          git commit -m "Update Extent Report with screenshots" || echo "No changes"
+          git commit -m "Update Extent Report" || echo "No changes"
           git push origin gh-pages --force
