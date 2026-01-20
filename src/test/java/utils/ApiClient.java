@@ -31,6 +31,29 @@ public class ApiClient {
 
     /**
      * Cách sử dụng
+     * ApiClient apiClient = new ApiClient();
+     * String response = apiClient.logout("http://your-api-url.com", "your-access-token");
+     */
+    public String logout(String baseUrl, String accessToken) throws Exception {
+        String[] command = {
+            "curl", "-X", "POST",
+            baseUrl + "/api/auth/logout",
+            "-H", "Authorization: Bearer " + accessToken
+        };
+
+        Process process = Runtime.getRuntime().exec(command);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        process.waitFor();
+        return response.toString();
+    }
+
+    /**
+     * Cách sử dụng
      *
      * ApiClient apiClient = new ApiClient();
      * String response = apiClient.getMe("http://your-api-url.com", "your-token-here");

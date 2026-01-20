@@ -48,12 +48,4 @@ public class BasePage {
             return false;
         }
     }
-
-    public boolean isFirstLogin(WebDriver driver, By wrongPassToastLocator, long timeOut) {
-        return !isElementVisibility(driver, wrongPassToastLocator, timeOut);
-    }
-
-    public boolean isTrustedDevice(WebDriver driver, By logoutBtnLocator, long timeOut) {
-        return isElementVisibility(driver, logoutBtnLocator, timeOut);
-    }
 }
