@@ -7,6 +7,7 @@
         <classes>
             <class name="LoginOtpAuthentTest"/>
             <class name="LoginMailAuthentTest"/>
+            <class name="NegativeLoginAuthentTest"/>
         </classes>
     </test>
 </suite>

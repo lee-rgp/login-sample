@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 
 @Listeners(ExtentTestListener.class)
 public class LoginOtpAuthentTest extends BaseTest {
-    private final long _timeOut = 10;
+    private final long _timeOut = 20;
     private final String _baseUrl = "https://stag.osyamazakiglobel.club";
     private final String _email = "admin12@gmail.com";
     private final String _password = "be12345678@Ab";

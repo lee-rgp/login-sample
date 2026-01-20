@@ -30,15 +30,20 @@ jobs:
           key: maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: maven-
 
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@latest
+
       - name: Run Selenium Tests
-        run: mvn clean test
+        run: mvn clean test -Dheadless=true
 
       - name: Upload Extent Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ExtentReport
-          path: test-output
+          path: |
+            test-output
+            target/surefire-reports
 
   publish-report:
     needs: selenium-test
