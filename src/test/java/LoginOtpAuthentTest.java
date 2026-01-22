@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 public class LoginOtpAuthentTest extends BaseTest {
     private final long _timeOut = 20;
     private final String _baseUrl = "https://stag.osyamazakiglobel.club";
-    private final String _email = "admin12@gmail.com";
+    private final String _email = "admin18@gmail.com";
     private final String _password = "be12345678@Ab";
     private final String _newPassword = "123456789@Ab";
     /*

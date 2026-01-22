@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 public class LoginMailAuthentTest extends BaseTest {
     private final long _timeOut = 20;
     private final String _baseUrl = "https://stag.osyamazakiglobel.club";
-    private final String _email = "admin41@gmail.com";
+    private final String _email = "admin17@gmail.com";
     private final String _password = "be12345678@Ab";
     private final String _newPassword = "123456789@Ab";
     /*
@@ -87,7 +87,6 @@ public class LoginMailAuthentTest extends BaseTest {
             recoveryCode();
         } else { // After first login
             extentTest.info("AFTER FIRST LOGIN");
-            login(this._newPassword);
             if (isTrustedDevice(authLoginInfo)) { // Trusted device
                 extentTest.info("TRUSTED DEVICE!");
                 authLogoutInfo = getAuthLogoutInfo(this._baseUrl, this.accessToken);

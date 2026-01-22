@@ -1,9 +1,6 @@
 package base;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -13,6 +10,12 @@ import java.time.Duration;
 public class BasePage {
     public WebDriverWait getWait(WebDriver driver, long timeOut) {
         return new WebDriverWait(driver, Duration.ofSeconds(timeOut));
+    }
+
+    public void waitMillis(WebDriver driver, long millis) {
+        long start = System.currentTimeMillis();
+        WebDriverWait wait = getWait(driver, millis);
+        wait.until(d -> System.currentTimeMillis() >= start + millis);
     }
 
     public WebElement waitForVisibilityOfElementLocated(WebDriver driver, By locator, long timeOut) {
@@ -73,5 +76,18 @@ public class BasePage {
         } catch (Exception e) {
             return true;
         }
+    }
+
+    public int getLengthCharacterInInputText(WebDriver driver, By locator, long timeOut) {
+        WebElement element = waitForVisibilityOfElementLocated(driver, locator, timeOut);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String value = (String) js.executeScript("return arguments[0].value;", element);
+        return value != null ? value.length() : 0;
+    }
+
+    public String getTextInInputText(WebDriver driver, By locator, long timeOut) {
+        WebElement element = waitForVisibilityOfElementLocated(driver, locator, timeOut);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        return (String) js.executeScript("return arguments[0].value;", element);
     }
 }

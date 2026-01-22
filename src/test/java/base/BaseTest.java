@@ -16,6 +16,8 @@ import utils.OTPGenerator;
 
 import java.util.Objects;
 
+import static org.testng.AssertJUnit.assertEquals;
+
 public class BaseTest extends BasePage {
 
     protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
@@ -23,9 +25,18 @@ public class BaseTest extends BasePage {
 
     @BeforeMethod
     public void setUp(ITestResult result) {
+        initDriver();
+    }
+
+    @AfterMethod
+    public void tearDown() {
+        quitDriver();
+    }
+
+    protected void initDriver() {
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        
+
         // Enable headless mode for CI/CD
         String headless = System.getProperty("headless");
         if ("true".equals(headless)) {
@@ -38,12 +49,7 @@ public class BaseTest extends BasePage {
         getDriver().manage().window().maximize();
     }
 
-    public static WebDriver getDriver() {
-        return driver.get();
-    }
-
-    @AfterMethod
-    public void tearDown() {
+    protected void quitDriver() {
         if (getDriver() != null) {
             // Sleep 3s
             try {
@@ -54,6 +60,10 @@ public class BaseTest extends BasePage {
             getDriver().quit();
             driver.remove();
         }
+    }
+
+    public static WebDriver getDriver() {
+        return driver.get();
     }
 
     protected ExtentTest getExtentTest() {
@@ -143,5 +153,16 @@ public class BaseTest extends BasePage {
         extentTest.info("Mail Otps Info: " + mailOtpsInfo);
         return JsonParser.getMailOtpsCode(mailOtpsInfo);
     }
+
+    public void assertEqualsWithReport(String actual, String expected, String message) {
+        try {
+            assertEquals(expected, actual);
+            getExtentTest().pass(message + " - SUCCESSFULLY");
+        } catch (AssertionError e) {
+            getExtentTest().fail(message + " - Expected: " + expected + ", Actual: " + actual);
+            throw e;
+        }
+    }
+
 
 }
