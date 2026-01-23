@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results ignored="0" total="2" passed="2" failed="0" skipped="0">
+  <reporter-output>
+  </reporter-output>
+  <suite started-at="2026-01-23T04:00:27 UTC" name="Selenium Sample Suite" finished-at="2026-01-23T04:00:51 UTC" duration-ms="24423">
+    <groups>
+    </groups>
+    <test started-at="2026-01-23T04:00:27 UTC" name="Login Test" finished-at="2026-01-23T04:00:51 UTC" duration-ms="24423">
+      <class name="LoginOtpAuthentTest">
+        <test-method is-config="true" signature="setUp(org.testng.ITestResult)[pri:0, instance:LoginOtpAuthentTest@53aac487]" started-at="2026-01-23T04:00:27 UTC" name="setUp" finished-at="2026-01-23T04:00:35 UTC" duration-ms="8098" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name={null} status=CREATED method=LoginOtpAuthentTest.loginOtpAuthentTest()[pri:0, instance:LoginOtpAuthentTest@53aac487] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="loginOtpAuthentTest()[pri:0, instance:LoginOtpAuthentTest@53aac487]" started-at="2026-01-23T04:00:35 UTC" name="loginOtpAuthentTest" finished-at="2026-01-23T04:00:41 UTC" duration-ms="5547" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginOtpAuthentTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:LoginOtpAuthentTest@53aac487]" started-at="2026-01-23T04:00:41 UTC" name="tearDown" finished-at="2026-01-23T04:00:44 UTC" duration-ms="3078" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- LoginOtpAuthentTest -->
+      <class name="LoginMailAuthentTest">
+        <test-method is-config="true" signature="setUp(org.testng.ITestResult)[pri:0, instance:LoginMailAuthentTest@6c1a5b54]" started-at="2026-01-23T04:00:44 UTC" name="setUp" finished-at="2026-01-23T04:00:44 UTC" duration-ms="361" status="PASS">
+          <params>
+            <param index="0">
+              <value>
+                <![CDATA[[TestResult name={null} status=CREATED method=LoginMailAuthentTest.loginMailAuthentTest()[pri:0, instance:LoginMailAuthentTest@6c1a5b54] output={null}]]]>
+              </value>
+            </param>
+          </params>
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method signature="loginMailAuthentTest()[pri:0, instance:LoginMailAuthentTest@6c1a5b54]" started-at="2026-01-23T04:00:44 UTC" name="loginMailAuthentTest" finished-at="2026-01-23T04:00:48 UTC" duration-ms="4241" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- loginMailAuthentTest -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:LoginMailAuthentTest@6c1a5b54]" started-at="2026-01-23T04:00:48 UTC" name="tearDown" finished-at="2026-01-23T04:00:51 UTC" duration-ms="3072" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- LoginMailAuthentTest -->
+    </test> <!-- Login Test -->
+  </suite> <!-- Selenium Sample Suite -->
+</testng-results>
