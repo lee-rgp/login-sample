@@ -46,12 +46,12 @@ public class LoginMailAuthentTest extends BaseTest {
                 Step4: Click LOGIN button
                     Is trusted device?
                         TRUE:
-                            Screen: Login with verify your email
-                                Step1: Input email code
-                                Step2: Click VERIFY button
                             Screen: BACK OFFICE
                                 VP1: Verify accessing BACK OFFICE screen successfully
                         FALSE:
+                            Screen: Login with verify your email
+                                Step1: Input email code
+                                Step2: Click VERIFY button
                             Screen: BACK OFFICE
                                 VP1: Verify accessing BACK OFFICE screen successfully
      Click LOGOUT button
